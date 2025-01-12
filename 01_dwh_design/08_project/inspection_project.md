@@ -19,3 +19,5 @@
 
 Диаграмма со структурой источников:
 
+![Диаграмма со структурой источников](http://plantuml.com:80/plantuml/svg/5Ov1hi8m30Nt_nIV2zH5Oe5OzIQHYQt6a3gHxT3h4rRlpQncyq2BSTI_YsYkWtXO_IyHtHy0XkUoIvJn7CwMcmPhBBaTOAwLqHJUQBrzKa6ZH9nkAnme2kirqLccSTadtLEtzk8Sm4OWwdr-QUf9L4AmBltNiB7It2y0)
+
