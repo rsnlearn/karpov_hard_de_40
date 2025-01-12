@@ -1,3 +1,44 @@
 # karpov_hard_de_40
 
-![PlantUML model](http://plantuml.com:80/plantuml/png/3SNB4K8n2030LhI0XBlTy0YQpF394D2nUztBtfUHrE0AkStCVHu0WP_-MZdhgiD1RicMdLpXMJCK3TC3o2iEDwHSxvNVjWNDE43nv3zt731SSLbJ7onzbyeF](https://img.plantuml.biz/plantuml/svg/ZLJBJjj05DtFLznTTvNw-01-nKscZLN7Zknf4KAL4eTIgI3OK5L2BUb3wjf0t1W2zY_S-IFE7KCJacdfmlBCFUU-ZxsHcI0rR_gHUaIziAl9z3HbWyJStJjXsecqmZLucuHT6gJ9YqZtCzeCJO-2-5MakzH9aysCNcfjLFOwZ0T16lGf2cDjjWQQajJq4gLqR4ApHJonGwxvZ4kyBxcWRSLVORWI0t5p3wqK7t5XSz3MaUysnx7WwmLQsP5zZ_Tldd89eBA7Yh_0POGOTSkgW5pTHJY00I7vGi9AifhFNPPQhYVmQboECuJAmPlRVSKJCEPsR3-uqcwDdy52EpmJlB1382wxa6SuxhRNurkVSyaW9dhYCpxr6P_vZCyL_sZ7O4VSY1c4QoGj2LqFmPswxj4I6dQC4T1JmeXgXqXt3upw7bBngTtxqnxcaDjzuakoEmXr8PCXHCundh9rgbSZbgWPOHfFfcyeU6R7CbDnjhb_yR9hRD4r8DbNEUyMUliffV8Spmpnt1f4SyTESutJZvYaZoLUtYfWIPdJPMrmiRRPXSnMGW6Ngaymje-YlR_WlvnY2ozASYJP9MvIxwuTA_x4qyVaQAx4XUBN1-HFEO6XxN-8aSjdKM0IID9ks-zqz4_ql_G0zNcziRKD7NVnExe1)
+'''mermaid
+erDiagram
+entity Проверка {
+Номер проверки
+Дата проверки
+Страна происхождения
+Место приемки
+Сюрвейер
+Договор
+Отправитель
+Получатель
+Заказ
+Партия
+Позиция
+Категория 1
+Категория 2
+Категория 3
+Категория 4
+Транспортное средство
+Способ доставки
+Дата проверки
+Дата прибытия
+Путь к файлу отчета о проверке
+Тип проверки
+Результат проверки
+Стоимость проверки
+}
+
+entity Утилизация {
+Компания утилизатор
+Номер договора
+Позиция
+Место утилизации
+Объем утилизации
+Цена утилизации за единицу
+Ед. измерения
+Стоимость утилизации
+Планируемая дата утилизации
+Дата утилизации
+Путь к файлу отчета об утилизации
+}
+'''
