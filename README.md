@@ -1,0 +1,1 @@
+# karpov_hard_de_40
