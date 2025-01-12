@@ -19,5 +19,5 @@
 
 Диаграмма со структурой источников:
 
-![Диаграмма со структурой источников](http://plantuml.com:80/plantuml/png/3SX1Zi8m343HVKynSu6wI2mG4g8tYKnYDOR4YMo7Nf_i_d-xEQgFMfP_bbX6eg7bBxjtkmCedkl1diTh66biuYI-nbP1JGgX2dnGU_k6Z9f2ed3Te28BR9UGpZp5-9Xt2rtRcw83QG8MwxEvYGKMTiQozb7BCsBCz92sx2HfmWy0)
+![Диаграмма со структурой источников](http://plantuml.com:80/plantuml/png/3SX1Zi8m343HVKynSu6wI2mG4g8tYKnYDOR4YMo7Nf_i_d-xEQgFMfP_bbX6eg7bBxjtkmCedkl1diTh66biuYI-nbP1JGgX2dnGU_k6Z9f2ed3Te28BR9UGpZp5-9Xt2rtRcw83QG8MwxEvYGKMTiQozb7BCsBCz92sx2HfmWy0?cache=no)
 
