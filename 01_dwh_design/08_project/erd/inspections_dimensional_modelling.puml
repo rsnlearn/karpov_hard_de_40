@@ -108,14 +108,15 @@ entity dim_vehicle {
 }
 
 entity fact_sorting {
-    sorting_id
+    **PK sorting_id**
+    --
+    **FK inspection_id**
     --
     contractor
     contract_number
     contract_dt
     act_number
     act_dt
-    sku_name
     load_area
     sorting_amount
     sorting_price
@@ -135,7 +136,7 @@ entity fact_sorting {
 
 dim_area ||..[hidden]|| dim_country
 dim_surveyor ||..[hidden]|| dim_item
-dim_country ||-down[hidden]|| dim_item
+dim_country ||.down[hidden]|| dim_item
 dim_area ||--o{ fact_inspection
 dim_country ||--o{ fact_inspection
 dim_item ||--o{ fact_inspection
@@ -144,5 +145,7 @@ fact_inspection }o--|| dim_contract
 fact_inspection }o--|| dim_order_part
 fact_inspection }o--|| dim_vehicle
 dim_order_part }o--|| fact_order
+dim_country ||.down[hidden]|| dim_item
+fact_inspection ||-o{fact_sorting
 
 @enduml

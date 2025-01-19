@@ -1,0 +1,60 @@
+@startuml
+' hide the spot
+' hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity inspection {
+inspection_number
+plan_inspection_dt
+inspection_dt
+country_of_origin
+inspection_area
+surveyor
+contract_number
+supplier
+consignee
+order_number
+order_date
+order_part_number
+Позиция
+category_a_perc
+category_b_perc
+category_c_perc
+category_d_perc
+vehicle_name
+container_num
+transport_type
+arrival_dttm
+inspection_report_path
+inspection_type
+inspection_result
+inspection_cost
+surveyor_comment
+sendout_dt
+}
+
+entity sorting {
+contractor
+contract_number
+contract_dt
+act_number
+act_dt
+sku_name
+load_area
+sorting_amount
+sorting_price
+unit
+price_per_unit
+sorting_plan_dt
+sorting_dt
+sorting_report_path
+contractor_comment
+utilization_perc
+return_perc
+sorting_perc
+acceptance_perc
+}
+
+@enduml

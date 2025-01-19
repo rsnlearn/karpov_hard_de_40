@@ -1,0 +1,228 @@
+@startuml name "inspection data vault"
+' hide the spot
+hide circle
+
+left to right direction
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity hub_inspection {
+    **PK inspection_sk**
+    --
+    **FK country_sk**
+    **FK inspection_area_sk**
+    **FK surveyor_sk**
+    **FK contract_sk**
+    **FK supplier_sk**
+    **FK consignee_sk**
+    **FK item_sk**
+    **FK vehicle_sk**
+    **FK order_part_sk**
+}
+
+entity sat_inspection_plan {
+    **PK inspection_sk**
+    --
+    plan_inspection_dt
+    plan_arrival_dt
+    load_dttm
+    source_id
+}
+
+entity sat_inspection_freicht {
+    **PK inspection_sk**
+    --
+    vehicle_name
+    transport_type
+    arrival_dttm
+    load_dttm
+    source_id
+}
+
+entity sat_inspection_sendout{
+    **PK inspection_sk**
+    --
+    sendout_dt
+    load_dttm
+    source_id
+}
+
+entity sat_inspection_report {
+    **PK inspection_sk**
+    --
+    container_num
+    inspection_number
+    inspection_dttm
+    inspection_report_path
+    inspection_type
+    inspection_result
+    inspection_cost
+    category_a_perc
+    category_b_perc
+    category_c_perc
+    category_d_perc
+    surveyor_comment
+    load_dttm
+    source_id
+}
+
+entity hub_country {
+    country_sk
+    --
+    country_iso_code
+    country_name
+    load_dttm
+    source_id
+}
+
+entity lnk_inspection_country {
+    inspection_sk
+    country_sk
+    --
+    load_dttm
+    source_id
+}
+
+entity hub_item {
+    **PK item_sk**
+    --
+    **FK item_vendor_sk**
+    **FK item_category_sk**
+    --
+    item_code
+    item_barchar_code
+    is_social
+    is_food
+    is_fresh
+    is_excise
+    load_dttm
+    source_id
+}
+
+entity hub_area {
+    **PK area_sk**
+    --
+    area_name
+    area_type
+    load_dttm
+    source_id
+}
+
+entity lnk_inspection_area{
+    **PK inspection_sk**
+    **PK area_sk**
+    --
+    load_dttm
+    source_id
+}
+
+entity hub_surveyor {
+    **PK area_sk**
+    --
+    area_name
+    area_type
+}
+
+entity hub_contract {
+    **PK contract_sk**
+    --
+    contract_number
+    contract_dt
+    load_dttm
+    source_id
+}
+
+entity lnk_inspection_contract {
+    **PK inspection_sk**
+    **PK contract_sk**
+    --
+    load_dttm
+    source_id
+}
+
+entity fact_order {
+    **PK order_sk**
+    --
+    order_num
+    order_dt
+    order_contract_num
+    order_contract_dt
+    supplier_name
+    supplier_code
+    load_dttm
+    source_id
+}
+
+entity hub_order_part {
+    **PK order_part_sk**
+    --
+    **FK order_sk**
+    --
+    part_code : char(20)
+    load_dttm
+    source_id
+}
+
+entity hub_vehicle {
+    **PK vehicle_sk**
+    --
+    vehicle_code
+    vehicle_name
+    vehicle_type
+    load_dttm
+    source_id
+}
+
+entity fact_sorting {
+    **PK sorting_sk**
+    --
+    **FK inspection_sk**
+    --
+    contractor
+    contract_number
+    contract_dt
+    act_number
+    act_dt
+    load_area
+    sorting_amount
+    sorting_price
+    unit
+    price_per_unit
+    sorting_plan_dt
+    sorting_dt
+    sorting_report_path
+    contractor_comment
+    utilization_perc
+    return_perc
+    sorting_perc
+    acceptance_perc
+    return_qnty
+    utilization_qnty
+}
+
+sat_inspection_report ||..up[hidden]|| sat_inspection_freicht
+sat_inspection_freicht ||..up[hidden]|| sat_inspection_plan
+sat_inspection_freicht ||.up[hidden]|| sat_inspection_sendout
+sat_inspection_report - hub_inspection
+sat_inspection_freicht - hub_inspection
+sat_inspection_plan - hub_inspection
+sat_inspection_sendout- hub_inspection
+hub_area ||..[hidden]|| hub_country
+hub_surveyor ||..[hidden]|| hub_item
+hub_country ||.down[hidden]|| hub_item
+hub_area ||--o{ lnk_inspection_area
+lnk_inspection_area }o--|| hub_inspection
+hub_country ||--o{ lnk_inspection_country
+lnk_inspection_country }o--|| hub_inspection
+hub_item ||--o{ hub_inspection
+hub_surveyor ||--o{ hub_inspection
+hub_inspection }o--|| lnk_inspection_contract
+lnk_inspection_contract }o--|| hub_contract
+hub_inspection }o--|| hub_order_part
+hub_inspection }o--|| hub_vehicle
+hub_order_part }o--|| fact_order
+hub_country ||.down[hidden]|| hub_item
+hub_inspection ||-o{fact_sorting
+
+@enduml
