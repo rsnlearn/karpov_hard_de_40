@@ -20,12 +20,9 @@ entity fact_inspection {
     **FK vehicle_id : int**
     **FK order_part_id : int**
     --
-    inspection_number
-    plan_inspection_dt
-    inspection_dt
-    order_number
-    order_date
-    order_part_number
+    inspection_number : char(250)
+    plan_inspection_dt : date
+    inspection_dttm : datetime
     category_a_perc
     category_b_perc
     category_c_perc
@@ -45,8 +42,8 @@ entity fact_inspection {
 entity dim_country {
     country_id
     --
-    * country_iso_code
-    * country_name
+    country_iso_code
+    country_name
 }
 
 entity dim_item {
@@ -83,7 +80,19 @@ entity dim_contract {
     contract_dt
 }
 
-entity dim_order_part{
+entity fact_order {
+    **PK order_id**
+    --
+    order_num
+    order_dt
+    order_contract_num
+    order_contract_dt
+    supplier_name
+    supplier_code
+
+}
+
+entity dim_order_part {
     **PK order_part_id**
     --
     **FK order_id**
@@ -91,7 +100,16 @@ entity dim_order_part{
     part_code : char(20)
 }
 
+entity dim_vehicle {
+    **PK vehicle_id**
+    --
+    vehicle_code
+    vehicle_type
+}
+
 entity fact_sorting {
+    sorting_id
+    --
     contractor
     contract_number
     contract_dt
@@ -111,16 +129,20 @@ entity fact_sorting {
     return_perc
     sorting_perc
     acceptance_perc
+    return_qnty
+    utilization_qnty
 }
 
 dim_area ||..[hidden]|| dim_country
 dim_surveyor ||..[hidden]|| dim_item
-'dim_country ||-down[hidden]|| dim_item
+dim_country ||-down[hidden]|| dim_item
 dim_area ||--o{ fact_inspection
 dim_country ||--o{ fact_inspection
 dim_item ||--o{ fact_inspection
 dim_surveyor ||--o{ fact_inspection
 fact_inspection }o--|| dim_contract
 fact_inspection }o--|| dim_order_part
+fact_inspection }o--|| dim_vehicle
+dim_order_part }o--|| fact_order
 
 @enduml
