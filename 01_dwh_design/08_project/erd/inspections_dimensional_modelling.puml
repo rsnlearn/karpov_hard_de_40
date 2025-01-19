@@ -1,0 +1,126 @@
+@startuml name "inspection dimensional modelling"
+' hide the spot
+hide circle
+
+left to right direction
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity fact_inspection {
+    **PK inspection_id : int**
+    --
+    **FK country_id : int**
+    **FK inspection_area_id : int**
+    **FK surveyor_id : int**
+    **FK contract_id : int**
+    **FK supplier_id : int**
+    **FK consignee_id : int**
+    **FK item_id : int**
+    **FK vehicle_id : int**
+    **FK order_part_id : int**
+    --
+    inspection_number
+    plan_inspection_dt
+    inspection_dt
+    order_number
+    order_date
+    order_part_number
+    category_a_perc
+    category_b_perc
+    category_c_perc
+    category_d_perc
+    vehicle_name
+    container_num
+    transport_type
+    arrival_dttm
+    inspection_report_path
+    inspection_type
+    inspection_result
+    inspection_cost
+    surveyor_comment
+    sendout_dt
+}
+
+entity dim_country {
+    country_id
+    --
+    * country_iso_code
+    * country_name
+}
+
+entity dim_item {
+    item_id
+    --
+    item_code
+    item_barchar_code
+    item_vendor_id
+    is_social
+    is_food
+    is_fresh
+    item_category_id
+    is_excise
+}
+
+entity dim_area {
+    **PK area_id**
+    --
+    area_name
+    area_type
+}
+
+entity dim_surveyor {
+    **PK area_id**
+    --
+    area_name
+    area_type
+}
+
+entity dim_contract {
+    **PK contract_id**
+    --
+    contract_number
+    contract_dt
+}
+
+entity dim_order_part{
+    **PK order_part_id**
+    --
+    **FK order_id**
+    --
+    part_code : char(20)
+}
+
+entity fact_sorting {
+    contractor
+    contract_number
+    contract_dt
+    act_number
+    act_dt
+    sku_name
+    load_area
+    sorting_amount
+    sorting_price
+    unit
+    price_per_unit
+    sorting_plan_dt
+    sorting_dt
+    sorting_report_path
+    contractor_comment
+    utilization_perc
+    return_perc
+    sorting_perc
+    acceptance_perc
+}
+
+dim_area ||..[hidden]|| dim_country
+dim_surveyor ||..[hidden]|| dim_item
+'dim_country ||-down[hidden]|| dim_item
+dim_area ||--o{ fact_inspection
+dim_country ||--o{ fact_inspection
+dim_item ||--o{ fact_inspection
+dim_surveyor ||--o{ fact_inspection
+fact_inspection }o--|| dim_contract
+fact_inspection }o--|| dim_order_part
+
+@enduml
