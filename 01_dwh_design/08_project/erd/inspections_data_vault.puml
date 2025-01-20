@@ -10,15 +10,14 @@ skinparam linetype ortho
 entity hub_inspection {
     **PK inspection_sk**
     --
-    **FK country_sk**
-    **FK inspection_area_sk**
+    **FK inspection_location_sk**
     **FK surveyor_sk**
     **FK contract_sk**
     **FK supplier_sk**
     **FK consignee_sk**
     **FK item_sk**
-    **FK vehicle_sk**
     **FK order_part_sk**
+    **FK container_sk**
 }
 
 entity sat_inspection_plan {
@@ -30,20 +29,93 @@ entity sat_inspection_plan {
     source_id
 }
 
-entity sat_inspection_freicht {
+entity hub_freicht {
     **PK inspection_sk**
     --
-    vehicle_name
-    transport_type
+    **FK country_sk**
+    **FK vehicle_sk**
     arrival_dttm
     load_dttm
     source_id
 }
 
-entity sat_inspection_sendout{
-    **PK inspection_sk**
+entity hub_country {
+    country_sk
     --
-    sendout_dt
+    country_iso_code
+    country_name
+    load_dttm
+    source_id
+}
+
+entity lnk_freicht_country {
+    inspection_sk
+    country_sk
+    --
+    load_dttm
+    source_id
+}
+
+entity hub_vehicle {
+    **PK vehicle_sk**
+    --
+    vehicle_code
+    vehicle_name
+    vehicle_type
+    load_dttm
+    source_id
+}
+
+entity lnk_freicht_vehicle {
+    inspection_sk
+    vehicle_sk
+    --
+    load_dttm
+    source_id
+}
+
+entity hub_container {
+    container_sk
+    --
+    container_code
+    container_size
+    container_weight
+    --
+    load_dttm
+    source_id
+}
+
+entity lnk_inspection_container {
+    inspection_sk
+    container_sk
+    --
+    load_dttm
+    source_id
+}
+
+entity lnk_freicht_container {
+    freicht_sk
+    container_sk
+    --
+    load_dttm
+    source_id
+}
+
+'entity sat_inspection_sendout{
+'    **PK inspection_sk**
+'    --
+'    sendout_dt
+'    load_dttm
+'    source_id
+'}
+
+entity lnk_container_item {
+    container_sk
+    item_sk
+    --
+    container_item_weight
+    container_item_pack_qnty
+    --
     load_dttm
     source_id
 }
@@ -63,22 +135,6 @@ entity sat_inspection_report {
     category_c_perc
     category_d_perc
     surveyor_comment
-    load_dttm
-    source_id
-}
-
-entity hub_country {
-    country_sk
-    --
-    country_iso_code
-    country_name
-    load_dttm
-    source_id
-}
-
-entity lnk_inspection_country {
-    inspection_sk
-    country_sk
     --
     load_dttm
     source_id
@@ -96,32 +152,36 @@ entity hub_item {
     is_food
     is_fresh
     is_excise
-    load_dttm
-    source_id
-}
-
-entity hub_area {
-    **PK area_sk**
     --
-    area_name
-    area_type
     load_dttm
     source_id
 }
 
-entity lnk_inspection_area{
+entity hub_location {
+    **PK location_sk**
+    --
+    location_name
+    location_type
+    --
+    load_dttm
+    source_id
+}
+
+entity lnk_inspection_location{
     **PK inspection_sk**
-    **PK area_sk**
+    **PK location_sk**
     --
     load_dttm
     source_id
 }
 
 entity hub_surveyor {
-    **PK area_sk**
+    **PK location_sk**
     --
-    area_name
-    area_type
+    surveyor_name
+    --
+    load_dttm
+    source_id
 }
 
 entity hub_contract {
@@ -129,6 +189,7 @@ entity hub_contract {
     --
     contract_number
     contract_dt
+    --
     load_dttm
     source_id
 }
@@ -141,7 +202,7 @@ entity lnk_inspection_contract {
     source_id
 }
 
-entity fact_order {
+entity hub_order {
     **PK order_sk**
     --
     order_num
@@ -150,6 +211,18 @@ entity fact_order {
     order_contract_dt
     supplier_name
     supplier_code
+    --
+    load_dttm
+    source_id
+}
+
+entity lnk_order_item {
+    PK order_sk
+    PK item_sk
+    --
+    order_item_qnty
+    order_item_price
+    --
     load_dttm
     source_id
 }
@@ -160,69 +233,101 @@ entity hub_order_part {
     **FK order_sk**
     --
     part_code : char(20)
+    --
     load_dttm
     source_id
 }
 
-entity hub_vehicle {
-    **PK vehicle_sk**
-    --
-    vehicle_code
-    vehicle_name
-    vehicle_type
-    load_dttm
-    source_id
-}
+'entity fact_sorting {
+'    **PK sorting_sk**
+'    --
+'    **FK inspection_sk**
+'    --
+'    contractor
+'    contract_number
+'    contract_dt
+'    act_number
+'    act_dt
+'    load_location
+'    sorting_amount
+'    sorting_price
+'    unit
+'    price_per_unit
+'    sorting_plan_dt
+'    sorting_dt
+'    sorting_report_path
+'    contractor_comment
+'    utilization_perc
+'    return_perc
+'    sorting_perc
+'    acceptance_perc
+'    return_qnty
+'    utilization_qnty
+'}
 
-entity fact_sorting {
-    **PK sorting_sk**
-    --
-    **FK inspection_sk**
-    --
-    contractor
-    contract_number
-    contract_dt
-    act_number
-    act_dt
-    load_area
-    sorting_amount
-    sorting_price
-    unit
-    price_per_unit
-    sorting_plan_dt
-    sorting_dt
-    sorting_report_path
-    contractor_comment
-    utilization_perc
-    return_perc
-    sorting_perc
-    acceptance_perc
-    return_qnty
-    utilization_qnty
-}
+'sat_inspection_report ||..up[hidden]|| sat_inspection_freicht
+'sat_inspection_freicht ||..up[hidden]|| sat_inspection_plan
+'sat_inspection_freicht ||.up[hidden]|| sat_inspection_sendout
+'sat_inspection_report - hub_inspection
+'sat_inspection_freicht - hub_inspection
+'sat_inspection_plan - hub_inspection
+'sat_inspection_sendout- hub_inspection
+'hub_location ||..[hidden]|| hub_country
+'hub_surveyor ||..[hidden]|| hub_item
+'hub_country ||.down[hidden]|| hub_item
+'hub_location ||--o{ lnk_inspection_location
+'lnk_inspection_location }o--|| hub_inspection
+'hub_country ||--o{ lnk_inspection_country
+'lnk_inspection_country }o--|| hub_inspection
+'hub_item ||--o{ hub_inspection
+'hub_surveyor ||--o{ hub_inspection
+'hub_inspection }o--|| lnk_inspection_contract
+'lnk_inspection_contract }o--|| hub_contract
+'hub_inspection }o--|| hub_order_part
+'hub_inspection }o--|| hub_vehicle
+'hub_order_part }o--|| fact_order
+'hub_country ||.down[hidden]|| hub_item
+'hub_inspection ||-o{fact_sorting
 
-sat_inspection_report ||..up[hidden]|| sat_inspection_freicht
-sat_inspection_freicht ||..up[hidden]|| sat_inspection_plan
-sat_inspection_freicht ||.up[hidden]|| sat_inspection_sendout
-sat_inspection_report - hub_inspection
-sat_inspection_freicht - hub_inspection
-sat_inspection_plan - hub_inspection
-sat_inspection_sendout- hub_inspection
-hub_area ||..[hidden]|| hub_country
-hub_surveyor ||..[hidden]|| hub_item
-hub_country ||.down[hidden]|| hub_item
-hub_area ||--o{ lnk_inspection_area
-lnk_inspection_area }o--|| hub_inspection
-hub_country ||--o{ lnk_inspection_country
-lnk_inspection_country }o--|| hub_inspection
-hub_item ||--o{ hub_inspection
-hub_surveyor ||--o{ hub_inspection
-hub_inspection }o--|| lnk_inspection_contract
-lnk_inspection_contract }o--|| hub_contract
-hub_inspection }o--|| hub_order_part
-hub_inspection }o--|| hub_vehicle
-hub_order_part }o--|| fact_order
-hub_country ||.down[hidden]|| hub_item
-hub_inspection ||-o{fact_sorting
+hub_freicht -{ lnk_freicht_country
+lnk_freicht_country }-left hub_country
+
+hub_freicht --{ lnk_freicht_vehicle
+lnk_freicht_vehicle }-- hub_vehicle
+
+hub_freicht --{ lnk_freicht_container
+lnk_freicht_container }-- hub_container
+
+hub_inspection -{ lnk_inspection_container
+lnk_inspection_container }- hub_container
+
+hub_container -{ lnk_container_item
+lnk_container_item }- hub_item
+
+hub_order -{ lnk_order_item
+lnk_order_item }- hub_item
+
+hub_order --{ lnk_order_part
+lnk_order_part }-- hub_order_part
+
+hub_order_part --{ lnk_order_part_freicht
+lnk_order_part_freicht }-- hub_freicht
+
+hub_order --{ lnk_order_supplier
+lnk_order_supplier }-- hub_supplier
+
+hub_inspection -left{ lnk_inspection_surveyor
+lnk_inspection_surveyor }-left hub_surveyor
+
+hub_inspection --{ lnk_inspection_item
+lnk_inspection_item }-- hub_item
+
+hub_inspection --{ lnk_inspection_location
+lnk_inspection_location }-- hub_location
+
+hub_inspection --{ lnk_inspection_inspector
+lnk_inspection_inspector }-- hub_inspector
+
+hub_inspection --{ sat_inspection_report
 
 @enduml
