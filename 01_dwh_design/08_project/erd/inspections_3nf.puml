@@ -1,0 +1,162 @@
+@startuml
+
+hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+left to right direction
+
+entity freicht {
+    PK freicht_code
+    --
+    FK origin_code
+    FK vehicle_code
+    FK freicht_order_part_guid
+    FK location_code
+    --
+    arrival_dttm
+}
+
+entity origin {
+    PK origin_code
+    --
+    origin_name
+}
+
+entity vehicle {
+    PK vehicle_code
+    --
+    vehicle_name
+}
+
+entity container {
+    PK container_code
+    --
+    container_size
+    container_type
+}
+
+entity inspection {
+    PK inspection_code
+    --
+    FK instpector_code
+    FK location_code
+    FK surveyor_code
+    FK container_code
+    FK report_code
+    FK result_code
+    FK item_code
+    --
+    inspection_dttm
+    
+}
+
+entity item {
+    PK item_code
+    --
+    item_name
+    item_category
+}
+
+entity order {
+    PK order_code
+    --
+    FK supplier_code
+    FK consignee_code
+    --
+    order_dt
+}
+
+entity order_part {
+    PK order_part_code
+    --
+    FK order_code
+    FK freight_code
+}
+
+entity supplier {
+    PK supplier_code
+    --
+    supplier_name
+}
+
+entity consignee {
+    PK consignee_code
+    --
+    consignee_name
+}
+
+entity surveyor {
+    PK surveyor_code
+    --
+    surveyor_name
+}
+
+entity location {
+    PK location_code
+    --
+    location_name
+}
+
+entity inspector {
+    PK inpector_code
+    --
+    inspector_fio
+}
+
+entity report {
+    PK report_code
+    --
+    FK inspection_code
+    --
+    category_a_perc
+    category_b_perc
+    category_c_perc
+    category_d_perc
+    report_comment
+}
+
+entity result {
+    PK result_code
+    --
+    FK inspection_code
+    --
+    inspection_result
+    result_comment
+}
+
+freicht }o--|| origin
+
+freicht }o--|| vehicle
+
+freicht ||-|{ container
+
+inspection ||-left|| container
+
+container }|--|{ item
+
+order ||--|{ item
+
+order ||-up-|{ order_part
+
+freicht ||-up-|{ order_part
+
+order }o-up-|| supplier
+
+order }o-up-|| consignee
+
+inspection }o--|| surveyor
+
+inspection }o--|{ item
+
+location ||--o{ inspection 
+
+inspector ||--o{ inspection
+
+inspection ||--|| report
+
+inspection ||--|| result
+
+@enduml
+ 

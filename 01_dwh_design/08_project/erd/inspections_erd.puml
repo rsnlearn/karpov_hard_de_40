@@ -23,9 +23,9 @@ order ||-up-|{ order_part
 
 freicht ||-up-|{ order_part
 
-order ||-up-|| supplier
+order }o-up-|| supplier
 
-order ||-up-|| consignee
+order }o-up-|| consignee
 
 inspection }o--|| surveyor
 
