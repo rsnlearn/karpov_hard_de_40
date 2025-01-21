@@ -1,0 +1,43 @@
+@startuml
+
+hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+left to right direction
+
+freicht }o--|| country
+
+freicht }o--|| vehicle
+
+freicht ||-|{ container
+
+inspection ||-left|| container
+
+container }|--|{ item
+
+order ||--|{ item
+
+order ||-up-|{ order_part
+
+freicht ||-up-|{ order_part
+
+order ||-up-|| supplier
+
+order ||-up-|| consignee
+
+inspection }o--|| surveyor
+
+inspection }o--|{ item
+
+location ||--o{ inspection 
+
+inspector ||--o{ inspection
+
+inspection ||--|| report
+
+inspection ||--|| result
+
+@enduml
+ 
