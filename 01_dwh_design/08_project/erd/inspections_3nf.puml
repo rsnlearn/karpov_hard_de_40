@@ -12,8 +12,9 @@ entity freicht {
     --
     FK origin_code
     FK vehicle_code
-    FK freicht_order_part_guid
+    FK order_part_code
     FK location_code
+    FK FK freicht_type_code
     --
     arrival_dttm
 }
@@ -27,7 +28,15 @@ entity origin {
 entity vehicle {
     PK vehicle_code
     --
+    FK freicht_type_code
+    --
     vehicle_name
+}
+
+entity freicht_type {
+    freicht_type_code
+    --
+    freicht_type_name
 }
 
 entity container {
@@ -37,19 +46,48 @@ entity container {
     container_type
 }
 
+entity container_item {
+    PK container_code
+    PK item_code
+    --
+    item_pack_qnty
+    item_weight
+    container_size
+    container_type
+}
+
+entity order_item {
+    PK order_code
+    PK item_code
+    --
+    item_weight
+    item_price
+}
+
+entity contract{
+    PK contract_code
+    --
+    contract_num
+    contract_dt
+}
+
 entity inspection {
     PK inspection_code
     --
-    FK instpector_code
+    FK inspector_code
     FK location_code
     FK surveyor_code
     FK container_code
     FK report_code
     FK result_code
     FK item_code
+    FK contract_code
     --
     inspection_dttm
-    
+    item_pack_qnty
+    item_weight
+    inspection_sum
+    inspection_plan_dt
 }
 
 entity item {
@@ -115,6 +153,7 @@ entity report {
     category_c_perc
     category_d_perc
     report_comment
+    report_path
 }
 
 entity result {
@@ -124,6 +163,17 @@ entity result {
     --
     inspection_result
     result_comment
+    act_number
+    act_date
+}
+
+entity class {
+    PK freicht_type
+    PK supplier_code
+    PK item_code
+    --
+    class_name
+    pack_perc
 }
 
 freicht }o--|| origin
@@ -132,11 +182,15 @@ freicht }o--|| vehicle
 
 freicht ||-|{ container
 
-inspection ||-left|| container
+inspection }|-left|| container
 
-container }|--|{ item
+container }|--|| container_item
 
-order ||--|{ item
+container_item ||--|{ item
+
+order ||--|{ order_item
+
+order_item }|--|| item
 
 order ||-up-|{ order_part
 
@@ -150,13 +204,27 @@ inspection }o--|| surveyor
 
 inspection }o--|{ item
 
-location ||--o{ inspection 
+location ||--o{ inspection
+
+location ||--o{ freicht
 
 inspector ||--o{ inspection
+
+contract ||--o{ inspection
 
 inspection ||--|| report
 
 inspection ||--|| result
+
+class }|--|| supplier
+
+class }|--|| freicht_type
+
+class }|--|| item
+
+freicht_type }|-|| freicht
+
+freicht_type }|--|| vehicle
 
 @enduml
  
