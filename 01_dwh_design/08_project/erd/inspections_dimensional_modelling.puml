@@ -1,151 +1,209 @@
-@startuml name "inspection dimensional modelling"
-' hide the spot
-hide circle
+@startuml
 
-left to right direction
+hide circle
 
 ' avoid problems with angled crows feet
 skinparam linetype ortho
 
-entity fact_inspection {
-    **PK inspection_id : int**
+left to right direction
+
+entity d_origin {
+    PK origin_code
     --
-    **FK country_id : int**
-    **FK inspection_area_id : int**
-    **FK surveyor_id : int**
-    **FK contract_id : int**
-    **FK supplier_id : int**
-    **FK consignee_id : int**
-    **FK item_id : int**
-    **FK vehicle_id : int**
-    **FK order_part_id : int**
+    origin_name
+}
+
+entity d_vehicle {
+    PK vehicle_code
     --
-    inspection_number : char(250)
-    plan_inspection_dt : date
-    inspection_dttm : datetime
+    FK freicht_type_code
+    --
+    vehicle_name
+}
+
+entity d_freicht_type {
+    PK freicht_type_code
+    --
+    freicht_type_name
+}
+
+entity d_container {
+    PK container_code
+    --
+    FK freicht_code
+    container_size
+    container_type
+}
+
+entity d_container_item {
+    PK container_code
+    PK item_code
+    --
+    item_pack_qnty
+    item_weight
+    container_size
+    container_type
+}
+
+entity d_order_item {
+    PK order_code
+    PK item_code
+    --
+    item_weight
+    item_price
+}
+
+entity d_contract{
+    PK contract_code
+    --
+    contract_num
+    contract_dt
+}
+
+entity f_inspection {
+    PK inspection_code
+    --
+    FK inspector_code
+    FK location_code
+    FK surveyor_code
+    FK container_code
+    FK report_code
+    FK act_code
+    FK item_code
+    FK contract_code
+    FK origin_code
+    FK vehicle_code
+    FK order_part_code
+    FK location_code
+    FK freicht_type_code
+    --
+    arrival_dttm
+    inspection_dttm
+    item_pack_qnty
+    item_weight
+    inspection_sum
+    inspection_plan_dt
+    inspection_result
+    result_comment
     category_a_perc
     category_b_perc
     category_c_perc
     category_d_perc
-    vehicle_name
-    container_num
-    transport_type
-    arrival_dttm
-    inspection_report_path
-    inspection_type
-    inspection_result
-    inspection_cost
-    surveyor_comment
-    sendout_dt
+    report_path
 }
 
-entity dim_country {
-    country_id
+entity d_item {
+    PK item_code
     --
-    country_iso_code
-    country_name
+    item_name
+    item_category
 }
 
-entity dim_item {
-    item_id
+entity d_order {
+    PK order_code
     --
-    item_code
-    item_barchar_code
-    item_vendor_id
-    is_social
-    is_food
-    is_fresh
-    item_category_id
-    is_excise
-}
-
-entity dim_area {
-    **PK area_id**
+    FK supplier_code
+    FK consignee_code
     --
-    area_name
-    area_type
-}
-
-entity dim_surveyor {
-    **PK area_id**
-    --
-    area_name
-    area_type
-}
-
-entity dim_contract {
-    **PK contract_id**
-    --
-    contract_number
-    contract_dt
-}
-
-entity fact_order {
-    **PK order_id**
-    --
-    order_num
     order_dt
-    order_contract_num
-    order_contract_dt
+}
+
+entity d_order_part {
+    PK order_part_code
+    --
+    FK order_code
+    FK freight_code
+}
+
+entity d_supplier {
+    PK supplier_code
+    --
     supplier_name
-    supplier_code
-
 }
 
-entity dim_order_part {
-    **PK order_part_id**
+entity d_consignee {
+    PK consignee_code
     --
-    **FK order_id**
-    --
-    part_code : char(20)
+    consignee_name
 }
 
-entity dim_vehicle {
-    **PK vehicle_id**
+entity d_surveyor {
+    PK surveyor_code
     --
-    vehicle_code
-    vehicle_type
+    surveyor_name
 }
 
-entity fact_sorting {
-    **PK sorting_id**
+entity d_location {
+    PK location_code
     --
-    **FK inspection_id**
+    location_name
+}
+
+entity d_inspector {
+    PK inpector_code
     --
-    contractor
-    contract_number
-    contract_dt
+    inspector_fio
+}
+
+entity d_act{
+    PK act_code
+    --
     act_number
-    act_dt
-    load_area
-    sorting_amount
-    sorting_price
-    unit
-    price_per_unit
-    sorting_plan_dt
-    sorting_dt
-    sorting_report_path
-    contractor_comment
-    utilization_perc
-    return_perc
-    sorting_perc
-    acceptance_perc
-    return_qnty
-    utilization_qnty
+    act_date
 }
 
-dim_area ||..[hidden]|| dim_country
-dim_surveyor ||..[hidden]|| dim_item
-dim_country ||.down[hidden]|| dim_item
-dim_area ||--o{ fact_inspection
-dim_country ||--o{ fact_inspection
-dim_item ||--o{ fact_inspection
-dim_surveyor ||--o{ fact_inspection
-fact_inspection }o--|| dim_contract
-fact_inspection }o--|| dim_order_part
-fact_inspection }o--|| dim_vehicle
-dim_order_part }o--|| fact_order
-dim_country ||.down[hidden]|| dim_item
-fact_inspection ||-o{fact_sorting
+entity d_class {
+    PK freicht_type_code
+    PK supplier_code
+    PK item_code
+    --
+    class_name
+    pack_perc
+}
+
+f_inspection }o--|| d_origin
+
+f_inspection }o--up|| d_vehicle
+
+f_inspection ||-|{ d_container
+
+f_inspection }|-left|| d_container
+
+d_container }|--|| d_container_item
+
+d_container_item ||--|{ d_item
+
+d_order ||--|{ d_order_item
+
+d_order_item }|--|| d_item
+
+d_order ||-up-|{ d_order_part
+
+f_inspection ||-up-|{ d_order_part
+
+d_order }o--|| d_supplier
+
+d_order }o-up-|| d_consignee
+
+f_inspection }o--|| d_surveyor
+
+f_inspection }o--|{ d_item
+
+d_location ||--o{ f_inspection
+
+d_inspector ||--upo{ f_inspection
+
+d_contract ||--o{ f_inspection
+
+f_inspection ||--|| d_act
+
+d_class }|--|| d_supplier
+
+d_class }|--|| d_freicht_type
+
+d_class }|--|| d_item
+
+d_freicht_type }|--|| d_vehicle
 
 @enduml
+ 
