@@ -34,7 +34,7 @@ entity vehicle {
 }
 
 entity freicht_type {
-    freicht_type_code
+    PK freicht_type_code
     --
     freicht_type_name
 }
@@ -42,6 +42,7 @@ entity freicht_type {
 entity container {
     PK container_code
     --
+    FK freicht_code
     container_size
     container_type
 }
@@ -168,7 +169,7 @@ entity result {
 }
 
 entity class {
-    PK freicht_type
+    PK freicht_type_code
     PK supplier_code
     PK item_code
     --
