@@ -165,9 +165,7 @@ f_inspection }o--|| d_origin
 
 f_inspection }o--up|| d_vehicle
 
-f_inspection ||-|{ d_container
-
-f_inspection }|-left|| d_container
+f_inspection }|-right-|| d_container
 
 d_container }|--|| d_container_item
 
@@ -191,7 +189,7 @@ f_inspection }o--|{ d_item
 
 d_location ||--o{ f_inspection
 
-d_inspector ||--upo{ f_inspection
+d_inspector ||-up-o{ f_inspection
 
 d_contract ||--o{ f_inspection
 
